@@ -2,9 +2,9 @@
 # Lab01 - Sumador/Restador de 4 bits
 
 # Integrantes
-    * [<!-- Remplace aqui nombre 1. -->](<!-- Remplace aqui link de usario 1 de github -->) 
-    * [<!-- Remplace aqui nombre 2. -->](<!-- Remplace aqui link de usario 2 de github -->) 
-    * [<!-- Remplace aqui nombre 3. -->](<!-- Remplace aqui link de usario 3 de github -->) 
+    *[Daniel Penagos Castro](https://github.com/Daniel-Penagos) 
+    *[Joused Danilo Forero Rodriguez](https://github.com jouseddanilo) 
+    *[Brayan Extidt Torres Gaona](https://github.com/BrayanExtidt) 
 # Informe
 
 Indice:

@@ -8,7 +8,7 @@ Este es el repositorio número 4 del la asignatura Arquitectura de Procesadores.
 
 ## Integrantes
 
-    * [Daniel Penagos Castro.](https://github.com/Daniel-Penagos) 
-    * [<Danilo Forero Rodriguez.>](<!-- Remplace aqui link de usario 2 de github -->) 
-    * [<Brayan Maldonado.>](<!-- Remplace aqui link de usario 3 de github -->) 
+    *[Daniel Penagos Castro.](https://github.com/Daniel-Penagos) 
+    *[Danilo Forero Rodriguez.](https://github.com/jouseddanilo) 
+    *[Brayan Extidt Torres Gaona.](https://github.com/BrayanExtidt) 
 

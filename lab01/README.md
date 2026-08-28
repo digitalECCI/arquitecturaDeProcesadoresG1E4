@@ -65,7 +65,8 @@ El banco de pruebas exhaustivo (`sumador_r_tb.v`) valida todas las combinaciones
 
 #### 1.2 Diagrama
 
-![Fig-4. Simulación del Sumador de 1 bit](/lab01/Diagramas/simulaciones/Sim_1b.jpeg)  
+![Fig-4. Simulación del Sumador de 1 bit](/lab01/Diagramas/simulaciones/Sim_1b.jpeg)
+
 *Fig-4. Formas de onda del sumador elemental de 1 bit para las 8 combinaciones de la tabla de verdad.*
 
 ![Fig-5. Simulación del Sumador de 4 bits](/lab01/Diagramas/simulaciones/Sim_4b.jpeg)  
@@ -73,7 +74,6 @@ El banco de pruebas exhaustivo (`sumador_r_tb.v`) valida todas las combinaciones
 
 ![Fig-6. Simulación del Sumador/Restador de 4 bits](/lab01/Diagramas/simulaciones/Sim_r_4b.jpeg)  
 *Fig-6. Formas de onda del sumador/restador verificando la detección de signo y corrección de magnitud.*
-
 ---
 
 ## Evidencias de implementación
@@ -85,8 +85,7 @@ El banco de pruebas exhaustivo (`sumador_r_tb.v`) valida todas las combinaciones
   * Salida Magnitud $S[3:0]$: LEDs `LEDR[3:0]`
   * Salida Signo / Acarreo $C_o$: LED `LEDR[4]`
 
-* **Video de Funcionamiento:** 
-
+* **Video de Funcionamiento:**  
 
 <video src="Video/Evidencia_lab1.mp4" controls width="100%">
   Tu navegador no admite la reproducción de este video.
@@ -116,6 +115,3 @@ Porque al restar $A - B$ cuando $A < B$, el resultado se obtiene en formato comp
 
 * Harris, D. M., & Harris, S. L. (2012). *Digital Design and Computer Architecture*. Morgan Kaufmann.
 * Brown, S., & Vranesic, Z. (2013). *Fundamentals of Digital Logic with Verilog Design*. McGraw-Hill.
-
-
-

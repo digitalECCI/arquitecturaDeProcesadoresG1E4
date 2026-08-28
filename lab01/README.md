@@ -2,7 +2,7 @@
 
 # Integrantes
 * [Daniel Penagos Castro](https://github.com/Daniel-Penagos)
-* [Danilo Forero Rodriguez](https://github.com/jouseddaniloS)
+* [Joused Danilo Forero Rodriguez](https://github.com/jouseddaniloS)
 * [Brayan Extidt Torres Gaona](https://github.com/BrayanExtidt)
 
 # Informe
@@ -119,3 +119,7 @@ Cuando una resta genera un resultado negativo (A < B), el valor entregado por el
 
 * Harris, D. M., & Harris, S. L. (2012). *Digital Design and Computer Architecture*. Morgan Kaufmann.
 * Brown, S., & Vranesic, Z. (2013). *Fundamentals of Digital Logic with Verilog Design*. McGraw-Hill.
+
+
+
+15451651

@@ -33,13 +33,47 @@ El diseño se estructura de forma modular en tres etapas jerárquicas:
 
 2. **Sumador de 4 bits en cascada (`Sumador4.v`):** Estructura *Ripple Carry Adder* (RCA) que interconecta cuatro instancias del sumador elemental, propagando los acarreos intermedios ($c_1, c_2, c_3$) de la etapa menos significativa a la más significativa.
 
-3. **Sumador / Restador con corrección de signo (`sumador_r.v`):**
-   * **Inversión condicional:** El selector $C_i$ ($0 = \text{Suma}$, $1 = \text{Resta}$) conmuta compuertas XOR para generar el complemento a 1 de $B$, introduciendo a la vez $C_i = 1$ como acarreo inicial para formar el complemento a 2 ($A + \overline{B} + 1$).
-   * **Detección de signo:** Se evalúa la condición de resta negativa mediante la compuerta combinacional:
-     $$\text{cable\_es\_negativo} = C_i \cdot \overline{C_{o\_\text{intermedio}}}$$
-   * **Ajuste de magnitud:** Si el resultado de una resta es negativo, el valor intermedio queda en complemento a 2. Una segunda etapa de cuatro compuertas XOR y cuatro sumadores de 1 bit invierte los bits y suma '1' automáticamente cuando `cable_es_negativo` está activo, entregando la magnitud corregida en $S[3:0]$ y marcando $C_o = 0$ como indicador de resultado negativo.
+### 3. Sumador / Restador con corrección de signo (`sumador_r.v`)
+
+- **Inversión condicional:** El selector `C_i` (`0 = Suma`, `1 = Resta`) conmuta compuertas XOR para generar el complemento a 1 de `B`, introduciendo a la vez `C_i = 1` como acarreo inicial para formar el complemento a 2:
+
+$$
+A + \overline{B} + 1
+$$
+
+- **Detección de signo:** Se evalúa la condición de resta negativa mediante la señal `cable_es_negativo`. Esta señal se activa cuando la operación corresponde a una resta (`C_i = 1`) y el acarreo intermedio es `0`.
+
+La condición lógica utilizada es:
+
+$$
+C_i \cdot \overline{C_o}
+$$
+
+Por lo tanto:
+
+`cable_es_negativo = C_i · ¬C_o_intermedio`
+
+- **Ajuste de magnitud:** Si el resultado de una resta es negativo, el valor intermedio queda representado en complemento a 2. Una segunda etapa formada por cuatro compuertas XOR y cuatro sumadores de 1 bit permite invertir los bits y sumar `1` automáticamente cuando `cable_es_negativo` está activo.
+
+De esta manera, se obtiene la magnitud corregida en `S[3:0]` y se establece `C_o = 0` como indicador de que el resultado de la resta es negativo.
 
 #### 1.2 Diagramas
+
+Los diagramas correspondientes al circuito muestran las siguientes etapas:
+
+1. **Inversión condicional de `B`:** las compuertas XOR permiten seleccionar entre `B` y su complemento dependiendo del valor de `C_i`.
+
+2. **Primera etapa de suma/resta:** se realiza la operación mediante cuatro sumadores completos de 1 bit, utilizando `C_i` como acarreo inicial.
+
+3. **Detección de signo:** se genera la señal `cable_es_negativo` a partir del selector de operación y del acarreo intermedio.
+
+4. **Corrección de magnitud:** cuando `cable_es_negativo` está activo, se invierten los cuatro bits del resultado intermedio y se suma `1` para obtener la magnitud positiva correspondiente.
+
+5. **Salida:** el resultado corregido se entrega mediante `S[3:0]`, mientras que `C_o = 0` indica que el resultado original de la resta era negativo.
+
+
+#### 1.2 Diagramas
+
 
 ![Fig-1. Diagrama circuital del sumador de 1 bit](/lab01/Diagramas/simulaciones/sumador_1bD.jpeg)  
 *Fig-1. Diagrama lógico a nivel de compuertas del sumador completo de 1 bit.*
@@ -90,7 +124,6 @@ El banco de pruebas exhaustivo (`sumador_r_tb.v`) valida todas las combinaciones
 <video src="Video/Evidencia_lab1.mp4" controls width="100%">
 </video>
 
-[▶ Ver video de funcionamiento](Video/Evidencia_lab1.mp4)
 ## Preguntas
 
 **1. ¿Cuál es la ventaja de utilizar un diseño jerárquico en Verilog frente a un solo archivo monolítico?**  

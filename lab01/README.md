@@ -85,8 +85,12 @@ El banco de pruebas exhaustivo (`sumador_r_tb.v`) valida todas las combinaciones
   * Salida Magnitud $S[3:0]$: LEDs `LEDR[3:0]`
   * Salida Signo / Acarreo $C_o$: LED `LEDR[4]`
 
-* **Video de Funcionamiento:**  
-  [Ver video de demostración en hardware](Video/Evidencia_lab1.mp4)
+* **Video de Funcionamiento:** 
+
+
+<video src="Video/Evidencia_lab1.mp4" controls width="100%">
+  Tu navegador no admite la reproducción de este video.
+</video>
 
 ---
 

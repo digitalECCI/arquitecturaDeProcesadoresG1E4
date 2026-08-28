@@ -41,13 +41,13 @@ El diseño se estructura de forma modular en tres etapas jerárquicas:
 
 #### 1.2 Diagramas
 
-![Fig-1. Diagrama circuital del sumador de 1 bit](<Diagramas \ simulaciones/sumador_1bD.jpeg>)  
+![Fig-1. Diagrama circuital del sumador de 1 bit](/lab01/Diagramas/simulaciones/sumador_1bD.jpeg)  
 *Fig-1. Diagrama lógico a nivel de compuertas del sumador completo de 1 bit.*
 
-![Fig-2. Diagrama del sumador de 4 bits](<Diagramas \ simulaciones/Sumador_4bD.jpeg>)  
+![Fig-2. Diagrama del sumador de 4 bits](/lab01/Diagramas/simulaciones/Sumador_4bD.jpeg)  
 *Fig-2. Conexión en cascada (Ripple Carry Adder) de 4 bits.*
 
-![Fig-3. Diagrama del sumador/restador de 4 bits](<Diagramas \ simulaciones/sumador-r_4bD.jpeg>)  
+![Fig-3. Diagrama del sumador/restador de 4 bits](/lab01/Diagramas/simulaciones/sumador-r_4bD.jpeg)  
 *Fig-3. Arquitectura del sumador/restador con bloque detector y corrector de complemento a 2.*
 
 ---
@@ -65,13 +65,13 @@ El banco de pruebas exhaustivo (`sumador_r_tb.v`) valida todas las combinaciones
 
 #### 1.2 Diagrama
 
-![Fig-4. Simulación del Sumador de 1 bit](<Diagramas \ simulaciones/Sim_1b.jpeg>)  
+![Fig-4. Simulación del Sumador de 1 bit](/lab01/Diagramas/simulaciones/Sim_1b.jpeg)  
 *Fig-4. Formas de onda del sumador elemental de 1 bit para las 8 combinaciones de la tabla de verdad.*
 
-![Fig-5. Simulación del Sumador de 4 bits](<Diagramas \ simulaciones/Sim_4b.jpeg>)  
+![Fig-5. Simulación del Sumador de 4 bits](/lab01/Diagramas/simulaciones/Sim_4b.jpeg)  
 *Fig-5. Simulación en GTKWave del sumador de 4 bits evaluando propagación de acarreos.*
 
-![Fig-6. Simulación del Sumador/Restador de 4 bits](<Diagramas \ simulaciones/Sim_r_4b.jpeg>)  
+![Fig-6. Simulación del Sumador/Restador de 4 bits](/lab01/Diagramas/simulaciones/Sim_r_4b.jpeg)  
 *Fig-6. Formas de onda del sumador/restador verificando la detección de signo y corrección de magnitud.*
 
 ---
@@ -115,4 +115,3 @@ Porque al restar $A - B$ cuando $A < B$, el resultado se obtiene en formato comp
 
 
 
-15451651

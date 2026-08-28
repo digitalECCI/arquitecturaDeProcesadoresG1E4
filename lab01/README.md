@@ -88,11 +88,9 @@ El banco de pruebas exhaustivo (`sumador_r_tb.v`) valida todas las combinaciones
 * **Video de Funcionamiento:**  
 
 <video src="Video/Evidencia_lab1.mp4" controls width="100%">
-  Tu navegador no admite la reproducción de este video.
 </video>
 
----
-
+[▶ Ver video de funcionamiento](Video/Evidencia_lab1.mp4)
 ## Preguntas
 
 **1. ¿Cuál es la ventaja de utilizar un diseño jerárquico en Verilog frente a un solo archivo monolítico?**  

@@ -22,13 +22,21 @@ Indice:
 ## Documentación del diseño implementado
 
 ### 1. Decodificador BCD a 7 segmentos
+El BCD es un esquema de representacion numerica para que cada digito decimal se pueda codificar utilizando cuatro digitos binarios.Se utiliza en sistemas digitales donde se requieren operaciones aritmeticas decimales.
 
 #### 1.1 Descripción
-
+Diseñar un cotrolador para display 7 segmentos segun el tipo de display con su respectiva tabla de verdad  para una representacion hezadecimal en la cuales se debera convertir numeros binarios de 2 digitos BCD(unidades y decenas) y 1 bit de signo (0=positivo, 1= negativo) para asi visualizar el resultado del sumador restador de 4 bits en los display 7 segmentosque viene incluido en la FPGA
 
 #### 1.2 Tabla de verdad
+En BCD es un sistema de numeracion en el cual odemos representar cada numero decimal utilizando 4 bits de numeros binarios pero como solo hay 10 digitos en el sistema decimal para representarlos podemos hacer la combinacion de 4 bits binarios es decir:
 
-...
+![Tabla de verdad](Imagenes/Combinaciones4b-10.png)<br>
+*Figura 1: Tabla de verdad de las combinaciones del decodificador BCD hasta 10.*
+
+Para representar de forma binaria los numeros decimales del 10 al 15 pero con su respectiva representacion en el sistema hezadecima es de la siguiente forma:
+![Tabla de verdad](Imagenes/Combinaciones4b-15.png)<br>
+*Figura 2: Tabla de verdad de las combinaciones del decodificador BCD de 10 hasta 15.*
+
 
 #### 1.3 Diseño en Verilog
 

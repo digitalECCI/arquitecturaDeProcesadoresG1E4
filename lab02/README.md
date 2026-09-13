@@ -149,7 +149,7 @@ Se realizo la simulacion del sistema completo, integrando el sumador/restador de
 
 En el siguiente enlace se puede observar el funcionamiento de la simulacion del sistema completo:
 
-[**Ver video de la simulación**](Video/Videoun.mp4)
+[**Ver video de la simulación**](Video/Videofun.mp4)
 
 *\*Figura 5: Video de la simulación del sistema completo.\**
 ---

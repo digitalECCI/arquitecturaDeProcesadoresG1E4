@@ -2,7 +2,7 @@
 
 # Integrantes
 * [Daniel Penagos Castro](https://github.com/Daniel-Penagos)
-* [Danilo Forero Rodriguez](https://github.com/jouseddaniloS)
+* [Danilo Forero Rodriguez](https://github.com/jouseddanilo)
 * [Brayan Extidt Torres Gaona](https://github.com/BrayanExtidt)
 
 # Informe
@@ -185,7 +185,7 @@ Una de las principales ventajas de realizar la conversion mediante hardware es q
 
 ---
 
-**## Referencias**
+## Referencias
 
 * Lenovo. *Código decimal binario (BCD).* [Lenovo - Código decimal binario](https://www.lenovo.com/co/es/glosario/codigo-decimal-binario/?utm_source=chatgpt.com)
 

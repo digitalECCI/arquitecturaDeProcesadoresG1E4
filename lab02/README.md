@@ -141,9 +141,8 @@ Se realizo la simulacion del sistema completo, integrando el sumador/restador de
 ## Evidencias de implementación
 
 * **Asignación de pines en la FPGA:**
-  * ...
-  * ...
-  * ...
+![BLOQUEBDC](Imagenes/Pinplaner.png)<br>
+*Figura 8: Bloque del pin planer de la FPGA*
 
 * **Funcionamiento en la tarjeta:**
 
@@ -151,7 +150,8 @@ En el siguiente enlace se puede observar el funcionamiento de la simulacion del 
 
 [**Ver video de la simulación**](Video/Videofun.mp4)
 
-*\*Figura 5: Video de la simulación del sistema completo.\**
+*\*Figura 9: Video de la simulación del sistema completo.\**
+
 ---
 
 ## Preguntas

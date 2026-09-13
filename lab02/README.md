@@ -35,6 +35,8 @@ En BCD es un sistema de numeracion en el cual podemos representar cada numero de
 *Figura 2: Tabla de verdad de las combinaciones del decodificador BCD hasta 10.*
 
 Para representar de forma binaria los numeros decimales del 10 al 15 pero con su respectiva representacion en el sistema hexadecimal se utilizan las combinaciones restantes de 4 bits de la siguiente forma:
+
+
 ![Tabla de verdad](Imagenes/Combinaciones4b-15.png)<br>
 *Figura 3: Tabla de verdad de las combinaciones del decodificador BCD de 10 hasta 15.*
 
@@ -46,8 +48,10 @@ Para representar de forma binaria los numeros decimales del 10 al 15 pero con su
 #### 1.4 Diagramas
 Bloque funcional del diseño
 
+
 ![BLOQUEBDC](Imagenes/BloqueBDC.png)<br>
 *Figura 4: Bloque del BCD*
+
 
 Este es el diseño, sintentizacion e implementacion del display de 7 segmentos para que permita visualizar los numeros en representacion hexadecimal en uno de los displays de la FPGA.
 

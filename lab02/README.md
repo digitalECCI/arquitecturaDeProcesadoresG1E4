@@ -147,8 +147,9 @@ Se realizo la simulacion del sistema completo, integrando el sumador/restador de
 
 * **Funcionamiento en la tarjeta:**
 
-...
+<video controls width="700"> <source src="Video/Videofun.mp4" type="video/mp4"> El navegador no permite reproducir este video. </video>
 
+**Figura 5: Video de la simulación del sistema completo.*
 ---
 
 ## Preguntas

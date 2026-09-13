@@ -43,14 +43,15 @@ Para representar de forma binaria los numeros decimales del 10 al 15 pero con su
 
 #### 1.3 Diseño en Verilog
 
-...
+![BLOQUEBDC](Imagenes/Diagrama_bcd_7seg.png)<br>
+*Figura 4: Bloque del BCD RTL Viewer*
 
 #### 1.4 Diagramas
 Bloque funcional del diseño
 
 
 ![BLOQUEBDC](Imagenes/BloqueBDC.png)<br>
-*Figura 4: Bloque del BCD*
+*Figura 5: Bloque del BCD*
 
 
 Este es el diseño, sintentizacion e implementacion del display de 7 segmentos para que permita visualizar los numeros en representacion hexadecimal en uno de los displays de la FPGA.
@@ -101,7 +102,8 @@ El resultado en BCD es `1000 0110`, lo cual representa correctamente al número 
 
 #### 2.4 Implementación en Verilog
 
-...
+![BLOQUEBDC](Imagenes/Diagrama_dobble_dabble.png)<br>
+*Figura 6: Bloque del Dobble Dabble RTL Viewer*
 
 ### 3. Integración del sistema
 
@@ -119,7 +121,8 @@ Finalmente, cada grupo BCD es enviado a su respectivo decodificador de 7 segment
 
 #### 3.3 Diagrama general
 
-...
+![BLOQUEBDC](Imagenes/Diagrama_Sumador_r_BCD.png)<br>
+*Figura 7: Bloque del Diagrama Completo RTL Viewer*
 
 ---
 

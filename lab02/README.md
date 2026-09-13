@@ -2,7 +2,7 @@
 
 # Integrantes
 * [Daniel Penagos Castro](https://github.com/Daniel-Penagos)
-* [Danilo Forero Rodriguez](https://github.com/jouseddaniloS)
+* [Danilo Forero Rodriguez](https://github.com/jouseddanilo)
 * [Brayan Extidt Torres Gaona](https://github.com/BrayanExtidt)
 
 # Informe

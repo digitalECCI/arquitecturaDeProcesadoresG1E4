@@ -35,6 +35,8 @@ En BCD es un sistema de numeracion en el cual podemos representar cada numero de
 *Figura 2: Tabla de verdad de las combinaciones del decodificador BCD hasta 10.*
 
 Para representar de forma binaria los numeros decimales del 10 al 15 pero con su respectiva representacion en el sistema hexadecimal se utilizan las combinaciones restantes de 4 bits de la siguiente forma:
+
+
 ![Tabla de verdad](Imagenes/Combinaciones4b-15.png)<br>
 *Figura 3: Tabla de verdad de las combinaciones del decodificador BCD de 10 hasta 15.*
 

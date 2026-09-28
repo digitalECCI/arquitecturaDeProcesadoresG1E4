@@ -9,7 +9,7 @@
 
 Indice:
 
-1. [Teoria Fundamental](#documentación-del-diseño-implementado)
+1. [Teoria Fundamental](#teoria-fundamental)
 2. [Simulaciones](#simulaciones)
 3. [Evidencias de implementación](#evidencias-de-implementación)
 4. [Preguntas](#preguntas)
@@ -20,158 +20,150 @@ Indice:
 
 ## Teoria Fundamental
 
-### 1. Multiplicacion Secuencia
-La multiplicacion secuencias es una tecnica para el diseño de hardware para que en lugar de calcular el resultado de un multiplicacion al momento usando un circuito gigante lo que hace el sistema es como si estubieramos paso por paso es decir bit por bit ya que reutiliza un unico sumador pequeño el cual desplaza el numero hacia un lado y repite el proceso hasta terminar.
+### 1. Multiplicación Secuencial mediante ASM
+La multiplicación secuencial es una técnica de diseño de hardware en la cual, en lugar de calcular el producto completo en un solo ciclo mediante un circuito combinacional de gran tamaño y consumo de área, la operación se divide paso a paso en múltiples ciclos de reloj. Este método reutiliza un sumador binario pequeño y un registro de desplazamiento, procesando los operandos bit a bit a lo largo del tiempo.
 
 #### 1.1 Descripción
-El diseño de este multiplicador secuencial consiste en poder dividir el circuito en dos bloque independiente el cual trabajaran en conjunto para que esto funcione se crearan los sistemas digitales
+El diseño del multiplicador secuencial de 3 bits se compone de dos bloques principales que trabajan en conjunto bajo una arquitectura de procesador específico: la **Ruta de Datos (Datapath)** y la **Unidad de Control (FSM/ASM)**.
 
-![Maquina de Estados](Imagenes/Display7.png)<br>
-*Figura 1: Arquitectura del Display 7 Segmentos*
-#### 1.2 Datapack
-Es la parte en la cual se encarga de guardar, mover y operar los numeros este bloque contiene registros para MD que es el que guarda el multiplicando de 3 bits, MR el que guarda el multiplicador de 3 bits y el que tiene la capacidad de desplazarse es decir moverse a la derecha bit por bit el sumador binario el cual es un circuito aritmetico pequeño de un pocos bits y un acumulador el cual contiene un espacio de 6 bits donde se ve suamndo y construyendo el resultado final paso a paso. 
+El módulo recibe un multiplicando (**MD**) de 3 bits y un multiplicador (**MR**) de 3 bits. Al iniciar el proceso mediante la señal de control `init`, el sistema calcula iterativamente el producto parcial y entrega como resultado final un valor de 6 bits (`pp`) acompañado de una señal indicadora de finalización (`done`).
 
-![Tabla de verdad](Imagenes/Combinaciones4b-10.png)<br>
-*Figura 2: Tabla de verdad de las combinaciones del decodificador BCD hasta 10.*
+#### 1.2 Ruta de Datos (Datapath)
+Es el bloque encargado de almacenar, desplazar y operar los datos numéricos. Sus componentes principales son:
+* **Registro MD:** Almacena el multiplicando de 3 bits.
+* **Registro MR:** Almacena el multiplicador de 3 bits y realiza desplazamientos a la derecha bit por bit en cada ciclo.
+* **Acumulador / Registro de Productos Parciales (`pp`):** Registro de 6 bits que almacena la suma acumulada del producto final.
+* **Sumador Binario:** Circuito aritmético que adiciona el multiplicando (`MD`) al acumulador únicamente cuando el bit menos significativo (`LSB`) del registro `MR` es igual a `1`.
 
+#### 1.3 Bloque de Control (Máquina de Estados Finita - FSM / ASM)
+La Unidad de Control es una Máquina de Estados Algorítmica encargada de coordinar las operaciones del Datapath en cada ciclo de reloj. No realiza cálculos aritméticos directos, sino que genera las señales de habilitación y selección necesarias:
+* **Estado IDLE / INICIO:** Espera la señal `init`. Al activarse, limpia el registro acumulador `pp` a `0`, carga los operandos `MD` y `MR`, y pasa al siguiente estado.
+* **Estado EVAL / ADD:** Examina el LSB del multiplicador (`MR[0]`). Si es `1`, ordena al sumador adicionar `MD` con la parte correspondiente del acumulador; si es `0`, omite la suma.
+* **Estado SHIFT:** Incrementa el contador interno de iteraciones, desplaza el registro `MR` a la derecha y ajusta el acumulador para la siguiente etapa.
+* **Estado DONE:** Al completar los 3 ciclos correspondientes a los 3 bits del multiplicador, activa la señal `done` para indicar que el resultado final de 6 bits está listo.
 
+#### 1.4 Diagramas y Esquemáticos RTL
 
-#### 1.3 Bloque de Control
-Como es una maquina de estados finita(FSM)encargada de dirigir el trafico no hace operaciones matematicas en su lugar decide que se hace en cada ciclo de reloj enviandose ordenes logicas el cual consta de 
-**Estado de Inicio: Al recibir la orden, limpia el registro poniendolo en 0 y y carga los valores de MD y MR
+![Diagrama de Flujo de Estados](Imagenes/Flujo%20de%20estados.png)<br>
+*Figura 1: Diagrama de flujo de la Máquina de Estados Algorítmica (ASM).*
 
-#### 1.4 Diagramas
-Bloque funcional del diseño
+![Bloque RTL del Multiplicador Secuencial](Imagenes/RTL-Multisec.png)<br>
+*Figura 2: Esquemático RTL de la estructura del Multiplicador Secuencial.*
 
+![Bloque RTL de Control del Multiplicador](Imagenes/RTL-MULTIC.png)<br>
+*Figura 3: Vista RTL de la Unidad de Control e integración del multiplicador.*
 
-![BLOQUEBDC](Imagenes/BloqueBDC.png)<br>
-*Figura 5: Bloque del BCD*
+---
 
+### 2. Conversión de Binario a BCD mediante Double Dabble
+El algoritmo **Double Dabble** (o *Shift-and-Add-3*) es un procedimiento algorítmico implementado en hardware para convertir números binarios puros a la notación BCD (Decimal Codificado en Binario).
 
-Este es el diseño, sintentizacion e implementacion del display de 7 segmentos para que permita visualizar los numeros en representacion hexadecimal en uno de los displays de la FPGA.
-
-### 2. Conversión de binario a BCD mediante Double Dabble
-El algoritmo Double Dabble o Shift-and-Add-3 es un metodo matematico y logico que utiliza la electronica digital para convertir numeros binarios puros a la notacion BCD (Decimal Codificado en Binario).
 #### 2.1 Descripción
-Su funcionamiento consta de transformar una serie de numeros binarios en grupos independientes de 4 bits para que cada grupo pueda representar directamente un digito decimal del 0 al 9.
+Dado que el multiplicador secuencial de 3 bits genera un resultado binario de 6 bits (con un rango de `000000` = `0` a `111101` = `49`), no es posible conectar este bus directamente a los displays de 7 segmentos de la FPGA. Se requiere aislar los dígitos decimales de **Decenas** y **Unidades** en bloques BCD independientes de 4 bits cada uno.
 
-¿Por que se necesita? RTA: Las computadoras o circuitos procesan los datos de forma binaria natural, ya que es mas eficiente. Sin embargo, los humanos leemos los numeros en base 10 (decimal). Para mostrar un numero binario grande en pantalla, ya sea en un display de 7 segmentos o LCD, no podemos conectar directamente el binario. Necesitamos aislar las unidades, las decenas y las centenas.
-#### 2.2 Funcionamiento del algoritmo
-El proceso se basa en un registro que se divide en las columnas BCD necesarias (Centenas, Decenas y Unidades) a la izquierda y el numero binario original a la derecha. Se siguen dos reglas basicas en un ciclo repetitivo para cada bit que tenga el numero a convertir.
+#### 2.2 Funcionamiento del Algoritmo
+El algoritmo procesa el número binario bit a bit desplazándolo hacia la izquierda dentro de un registro que contiene los bloques BCD de salida. Sigue dos reglas iterativas:
+1. **Evaluación de Nibbles:** Se examina cada bloque BCD de 4 bits. Si el valor es mayor o igual a 5 (`>= 5`), se le suman 3 (`+ 3`). Si es menor a 5, no se modifica.
+2. **Desplazamiento (Shift):** Se desplaza todo el registro un bit hacia la izquierda, ingresando el siguiente bit del número binario por la derecha.
 
-Para evaluar el Double Dabble se mira cada columna BCD de 4 bits de manera independiente. Si el valor de alguna columna es igual o mayor a 5, se le suma 3. Si es menor a 5 no se realiza ninguna modificacion.
-Para realizar el desplazamiento (Double) se desplazan todos los bits un espacio hacia la izquierda y se introduce el siguiente bit del numero binario. Este proceso se repite hasta procesar todos los bits del numero a convertir.
+#### 2.3 Ejemplo de Conversión
+Para convertir el valor máximo posible del multiplicador, $7 \times 7 = 49$ (`110001` en binario de 6 bits):
 
-#### 2.3 Ejemplo de conversión
-El número tiene 4 bits, por lo que se necesitan 4 iteraciones.
-El registro BCD tiene 2 grupos: [Decenas | Unidades]
+* **Entrada Binaria:** `110001` (6 bits = 6 desplazamientos).
+* **Bloques BCD:** Decenas (4 bits) | Unidades (4 bits).
 
-Para entender el funcionamiento del algoritmo **Double Dabble** limitado a dos dígitos decimales, convertiremos el número binario de 7 bits `1010110` (que equivale al **86** en decimal) a formato **BCD**.
-
- Configuración Inicial:
-* **Número Binario:** `1010110` (7 bits = realizaremos exactamente 7 desplazamientos).
-* **Columnas BCD necesarias:** Decenas (4 bits) y Unidades (4 bits).
-
-### Tabla de Estados del Algoritmo:
-
-Resultado Final:
-Al completarse los 7 desplazamientos, leemos directamente los bloques BCD resultantes:
-* **Decenas:** `1000` = **8**
-* **Unidades:** `0110` = **6**
-
-El resultado en BCD es `1000 0110`, lo cual representa correctamente al número **86** en decimal.
-
+| Iteración | Operación | Decenas | Unidades | Binario |
+| :---: | :--- | :---: | :---: | :---: |
+| 0 | Inicio | `0000` | `0000` | `110001` |
+| 1 | Shift 1 | `0000` | `0000` | `10001_` |
+| 2 | Shift 2 | `0000` | `0001` | `0001__` |
+| 3 | Shift 3 | `0000` | `0011` | `001___` |
+| 4 | Shift 4 | `0000` | `0011` | `01____` |
+| 5 | Shift 5 | `0000` | `0110` | `1_____` |
+| 5.1 | Unidades >= 5 ($6 \ge 5$) $\rightarrow$ Suma 3 | `0000` | **`1001`** | `1_____` |
+| 6 | Shift 6 | `0000` | `0010` | `______` |
+| **Final** | **Resultado:** BCD Decenas = 4 (`0100`), Unidades = 9 (`1001`) | **`0100`** | **`1001`** | `______` |
 
 #### 2.4 Implementación en Verilog
 
-![BLOQUEDobble_Dabble](Imagenes/Diagrama_dobble_dabble.png)<br>
-*Figura 6: Bloque del Dobble Dabble RTL Viewer*
+![RTL Double Dabble](Imagenes/RTL-Dobble.png)<br>
+*Figura 4: Esquemático RTL del módulo conversor Double Dabble.*
 
-### 3. Integración del sistema
+---
+
+### 3. Integración del Sistema
 
 #### 3.1 Descripción
+El sistema completo (módulo Top) integra el multiplicador secuencial de 3 bits, el conversor Double Dabble y dos decodificadores BCD a 7 segmentos. Esta arquitectura permite ingresar dos operandos mediante interruptores de la tarjeta FPGA y desplegar el resultado en formato decimal sobre los displays de 7 segmentos.
 
-El sistema completo esta compuesto por el sumador/restador de 4 bits, el algoritmo Double Dabble y los decodificadores BCD a 7 segmentos. Estos bloques se integran para permitir que el resultado de la operacion realizada pueda ser visualizado de forma decimal en los displays de la FPGA.
-
-#### 3.2 Funcionamiento
-
-El funcionamiento comienza con los valores de entrada de los operandos y el selector que determina si se realiza una suma o una resta. El sumador/restador procesa estos valores y genera el resultado correspondiente junto con el bit de signo.
-
-Posteriormente, el resultado binario es enviado al modulo Double Dabble, donde se realiza la conversion de binario a BCD. El resultado de esta conversion se divide en los diferentes digitos decimales, como unidades, decenas y centenas.
-
-Finalmente, cada grupo BCD es enviado a su respectivo decodificador de 7 segmentos. Estos decodificadores generan las señales necesarias para activar los segmentos de los displays y mostrar visualmente el resultado de la operacion.
-
-#### 3.3 Diagrama general
-
-![Sumador_BCD](Imagenes/Diagrama_Sumador_r_BCD.png)<br>
-*Figura 7: Bloque del Diagrama Completo RTL Viewer*
+#### 3.2 Funcionamiento del Top Module
+1. **Entrada de datos:** Los operandos `MD` (3 bits) y `MR` (3 bits) se ingresan mediante switches, y la señal `init` mediante un pulsador.
+2. **Procesamiento Aritmético:** El bloque `mult` ejecuta la multiplicación secuencial coordinada por la ASM, generando el resultado de 6 bits (`pp`) y activando `done`.
+3. **Conversión de Formato:** El bus de 6 bits `pp` es tomado por el módulo `double_dabble`, separando el valor en nibbles de 4 bits para Decenas y Unidades.
+4. **Visualización:** Cada nibble BCD entra a un módulo decodificador que controla las salidas de los displays de 7 segmentos de ánodo o cátodo común.
 
 ---
 
 ## Simulacion
 
-### 1. Simulación del sistema completo
+### 1. Simulación del Sistema Completo (Testbench)
 
-#### 1.2 Descripcion
-Se realizo la simulacion del sistema completo, integrando el sumador/restador de 4 bits, el algoritmo Double Dabble y el decodificador BCD a 7 segmentos. En esta simulacion se comprobo el funcionamiento de los diferentes bloques de manera conjunta y se verifico que el resultado de la operacion realizada fuera convertido correctamente y mostrado en los displays de 7 segmentos.
-### 1.3 Diagrama
+#### 1.1 Descripción
+Se diseñó un testbench en Verilog para validar el comportamiento temporal del multiplicador y los módulos de conversión. Se evaluaron casos de prueba límite, tales como:
+* $0 \times 0 = 0$
+* $7 \times 1 = 7$
+* $7 \times 7 = 49$
 
-...
+En la simulación se verifica que la señal `done` se active exactamente al finalizar el conteo de ciclos de la máquina de estados y que la salida del Double Dabble mantenga el valor correcto una vez terminada la operación.
 
 ---
 
 ## Evidencias de implementación
 
-* **Asignación de pines en la FPGA:**
-![BLOQUEPINPLANER](Imagenes/Pinplaner.png)<br>
-*Figura 8: Bloque del pin planer de la FPGA*
+* **Asignación de Pines en la FPGA:**
 
-* **Funcionamiento en la tarjeta:**
+La asignación de entradas (switches, reloj `clk`, reset e `init`) y salidas (displays de 7 segmentos y LED indicador de `done`) se configuró mediante la herramienta Pin Planner de Quartus.
 
-En el siguiente enlace se puede observar el funcionamiento de la simulacion del sistema completo:
+* **Funcionamiento en la Tarjeta:**
 
-[**Ver video de la simulación**](Video/Videofun.mp4)
+En el siguiente enlace se puede observar el funcionamiento físico e implementación del sistema completo:
 
-*\*Figura 9: Video de la simulación del sistema completo.\**
+[**Ver video de la simulación y prueba en hardware**](Video/Videofun.mp4)
+
+*\*Figura 5: Demostración en video de la multiplicación secuencial y visualización en displays.\**
 
 ---
 
 ## Preguntas
 
-**1. ¿Qué es BCD y por qué se utiliza en este diseño?**
+**1. ¿Qué ventajas tiene un multiplicador secuencial frente a uno combinacional?**
+Un multiplicador secuencial reduce drásticamente el área ocupada en la FPGA y el consumo de recursos de hardware (LUTs y compuertas lógicas), ya que reutiliza un único sumador binario pequeño para todos los ciclos de la operación. En contraste, un multiplicador combinacional requiere una red extensa de sumadores en paralelo que crece exponencialmente con el número de bits.
 
-BCD significa Decimal Codificado en Binario y es una forma de representar cada digito decimal utilizando 4 bits.Se utiliza en este diseño porque permite separar el resultado en unidades, decenas y centenas, haciendo posible conectar cada digito directamente con un decodificador de 7 segmentos para su visualizacion.
+**2. ¿Por qué es necesario utilizar una Máquina de Estados (ASM) en este diseño?**
+La Máquina de Estados Algorítmica es indispensable para sincronizar la secuencia de pasos temporales (carga de datos, evaluación del bit actual, suma acumulada, desplazamiento y generación de la señal final). Garantiza que cada operación ocurra en el ciclo de reloj correcto y permite coordinar de forma ordenada el Datapath.
 
-**2. ¿Cuál es la diferencia entre un display de ánodo común y uno de cátodo común?**
+**3. ¿Cómo influye el tamaño de los operandos en el número de ciclos de reloj requeridos?**
+En este multiplicador de 3 bits, el algoritmo requiere 3 iteraciones (ciclos de desplazamiento/suma) más los estados inicial y final. Si los operandos fueran de $N$ bits, el multiplicador requeriría $N$ ciclos principales de procesamiento. El tiempo de cálculo escala linealmente $\mathcal{O}(N)$ con el número de bits del multiplicador.
 
-La principal diferencia esta en la forma en que se conectan los terminales comunes de los LEDs del display. En un display de catodo comun, los catodos estan conectados entre si y el segmento se activa aplicando un nivel logico alto. En un display de anodo comun, los anodos estan conectados entre si y el segmento se activa aplicando un nivel logico bajo.Por esta razon, al realizar el diseño en Verilog es necesario tener en cuenta el tipo de display utilizado, ya que las señales de activacion seran diferentes.
+**4. ¿Por qué el algoritmo Double Dabble suma 3 cuando un nibble es mayor o igual a 5?**
+Se suma 3 porque en la codificación BCD los valores válidos por cada dígito abarcan únicamente del 0 al 9 (base 10), mientras que un nibble binario puede representar del 0 al 15 (base 16). La diferencia entre ambas bases al realizar un desplazamiento a la izquierda (multiplicación por 2) es de 6 unidades ($16 - 10 = 6$). Al sumar 3 antes del desplazamiento, el efecto duplicador posterior equivale a haber sumado 6 ($3 \times 2 = 6$), ajustando automáticamente el acarreo hacia el siguiente grupo BCD de decenas o centenas.
 
-**3. ¿Por qué es necesario utilizar Double Dabble?**
+**5. ¿Qué función cumple la señal `done` en el diseño del multiplicador?**
+La señal `done` actúa como una bandera de sincronismo (handshake). Indica a los módulos externos o displays que el proceso iterativo de la máquina de estados ha concluido y que el dato presente en el bus de salida de 6 bits es estable y válido para ser registrado o visualizado.
 
-Es necesario utilizar Double Dabble porque el resultado del sumador/restador se encuentra representado en binario, mientras que para mostrar el resultado en los displays de 7 segmentos se necesita separar el numero en sus diferentes digitos decimales,
-Double Dabble permite realizar esta conversion de binario a BCD mediante desplazamientos y sumas, obteniendo las unidades, decenas y centenas que posteriormente pueden ser enviadas a los displays.
-
-**4. ¿Por qué el algoritmo suma 3 cuando un nibble es mayor o igual a 5?**
-Se suma 3 cuando un nibble tiene un valor mayor o igual a 5 porque los valores BCD validos solamente llegan hasta 9. La suma de 3 antes del desplazamiento permite realizar correctamente el acarreo hacia el siguiente digito decimal durante el proceso de conversion, De esta manera se evita que el resultado del desplazamiento produzca una representacion incorrecta en BCD y se permite continuar formando correctamente las decenas y centenas.
-
-**5. ¿Qué ventaja tiene realizar esta conversión mediante hardware?**
-
-Una de las principales ventajas de realizar la conversion mediante hardware es que el proceso puede ejecutarse directamente dentro de la FPGA utilizando circuitos logicos, sin depender de operaciones de division o multiplicacion realizadas mediante software, Esto permite realizar la conversion de manera rapida y eficiente, ademas de que los diferentes bloques pueden trabajar de forma integrada para generar directamente las señales necesarias para los displays de 7 segmentos.
+---
 
 ## Conclusiones
 
-* Se diseño e implemento un decodificador BCD a 7 segmentos capaz de recibir una entrada de 4 bits y generar las señales necesarias para representar los diferentes valores en el display.
-
-* Se comprendio el funcionamiento del algoritmo Double Dabble como metodo para convertir un numero binario a su correspondiente representacion BCD, utilizando desplazamientos y la suma de 3 cuando es necesario.
-
-* Se realizo la integracion entre el sumador/restador de 4 bits, el conversor Double Dabble y los decodificadores de 7 segmentos, permitiendo visualizar el resultado de las operaciones en los displays de la FPGA.
-
-* Las simulaciones permitieron comprobar el funcionamiento de los diferentes bloques antes de realizar la implementacion fisica en la tarjeta de desarrollo.
+* Se diseñó e implementó exitosamente un multiplicador secuencial de 3 bits controlado por una Máquina de Estados Algorítmica (ASM) en Verilog HDL.
+* Se comprobó experimentalmente la eficiencia del enfoque secuencial, optimizando el uso de recursos lógicos en la tarjeta de desarrollo respecto a soluciones puramente combinacionales.
+* Se integró el algoritmo Double Dabble con decodificadores de 7 segmentos para realizar la conversión directa de binario a BCD en hardware, permitiendo la lectura decimal del resultado final.
+* La validación en simulación previa a la sintesis en Quartus permitió corregir los tiempos de respuesta de la máquina de estados y asegurar la correcta activación de la señal `done`.
 
 ---
 
 ## Referencias
 
-* Lenovo. *Código decimal binario (BCD).* [Lenovo - Código decimal binario](https://www.lenovo.com/co/es/glosario/codigo-decimal-binario/?utm_source=chatgpt.com)
-
-* Guía de laboratorio Lab02 - Decodificador BCD a 7 segmentos y algoritmo Double Dabble, Arquitectura de Procesadores ECCI.
+* Harris, D., & Harris, S. (2012). *Digital Design and Computer Architecture*. Morgan Kaufmann.
+* Guía de laboratorio Lab03 - Multiplicador de 3 bits usando Máquina de Estados, Arquitectura de Procesadores ECCI.
+* Wakerly, J. F. (2001). *Diseño digital: Principios y prácticas*. Pearson Educación.

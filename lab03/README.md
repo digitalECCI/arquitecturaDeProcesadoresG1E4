@@ -23,35 +23,42 @@ Indice:
 ### 1. Multiplicación Secuencial mediante ASM
 La multiplicación secuencial es una técnica de diseño de hardware en la cual, en lugar de calcular el producto completo en un solo ciclo mediante un circuito combinacional de gran tamaño y consumo de área, la operación se divide paso a paso en múltiples ciclos de reloj. Este método reutiliza un sumador binario pequeño y un registro de desplazamiento, procesando los operandos bit a bit a lo largo del tiempo.
 
-#### 1.1 Descripción
+#### 1.1 Descripción y Bloque Funcional
 El diseño del multiplicador secuencial de 3 bits se compone de dos bloques principales que trabajan en conjunto bajo una arquitectura de procesador específico: la **Ruta de Datos (Datapath)** y la **Unidad de Control (FSM/ASM)**.
 
-El módulo recibe un multiplicando (**MD**) de 3 bits y un multiplicador (**MR**) de 3 bits. Al iniciar el proceso mediante la señal de control `init`, el sistema calcula iterativamente el producto parcial y entrega como resultado final un valor de 6 bits (`pp`) acompañado de una señal indicadora de finalización (`done`).
+El módulo recibe un multiplicando (**MD**) de 3 bits y un multiplicador (**MR**) de 3 bits. Al iniciar el proceso mediante la señal de control `INIT`, el sistema calcula iterativamente el producto parcial y entrega como resultado final un valor de 6 bits (`PP`) acompañado de una señal indicadora de finalización (`DONE`).
+
+![Bloque del Multiplicador](Imagenes/Bloque%20de%20Multiplicador.png)<br>
+*Figura 1: Bloque funcional general del Multiplicador Secuencial.*
 
 #### 1.2 Ruta de Datos (Datapath)
 Es el bloque encargado de almacenar, desplazar y operar los datos numéricos. Sus componentes principales son:
-* **Registro MD:** Almacena el multiplicando de 3 bits.
-* **Registro MR:** Almacena el multiplicador de 3 bits y realiza desplazamientos a la derecha bit por bit en cada ciclo.
-* **Acumulador / Registro de Productos Parciales (`pp`):** Registro de 6 bits que almacena la suma acumulada del producto final.
+* **Registro MD:** Almacena el multiplicando de 3 bits ($m$ bits).
+* **Registro MR:** Almacena el multiplicador de 3 bits ($m$ bits) y realiza desplazamientos a la derecha bit por bit en cada ciclo.
+* **Acumulador / Registro de Productos Parciales (`PP`):** Registro de 6 bits ($2m$ bits) que almacena la suma acumulada del producto final.
 * **Sumador Binario:** Circuito aritmético que adiciona el multiplicando (`MD`) al acumulador únicamente cuando el bit menos significativo (`LSB`) del registro `MR` es igual a `1`.
 
-#### 1.3 Bloque de Control (Máquina de Estados Finita - FSM / ASM)
-La Unidad de Control es una Máquina de Estados Algorítmica encargada de coordinar las operaciones del Datapath en cada ciclo de reloj. No realiza cálculos aritméticos directos, sino que genera las señales de habilitación y selección necesarias:
-* **Estado IDLE / INICIO:** Espera la señal `init`. Al activarse, limpia el registro acumulador `pp` a `0`, carga los operandos `MD` y `MR`, y pasa al siguiente estado.
-* **Estado EVAL / ADD:** Examina el LSB del multiplicador (`MR[0]`). Si es `1`, ordena al sumador adicionar `MD` con la parte correspondiente del acumulador; si es `0`, omite la suma.
-* **Estado SHIFT:** Incrementa el contador interno de iteraciones, desplaza el registro `MR` a la derecha y ajusta el acumulador para la siguiente etapa.
-* **Estado DONE:** Al completar los 3 ciclos correspondientes a los 3 bits del multiplicador, activa la señal `done` para indicar que el resultado final de 6 bits está listo.
+#### 1.3 Bloque de Control (Máquina de Estados Finita - FSM)
+La Unidad de Control es una Máquina de Estados Algorítmica encargada de coordinar las operaciones del Datapath en cada ciclo de reloj. No realiza cálculos aritméticos directos, sino que genera las señales de habilitación (`SH`, `ADD`, `RESET`, `DONE`) necesarias:
 
-#### 1.4 Diagramas y Esquemáticos RTL
+![Estados de Control](Imagenes/Estados-de-Control.png)<br>
+*Figura 2: Diagrama de la Máquina de Estados Finita (FSM) de control.*
 
-![Diagrama de Flujo de Estados](Imagenes/Flujo%20de%20estados.png)<br>
-*Figura 1: Diagrama de flujo de la Máquina de Estados Algorítmica (ASM).*
+* **START:** Espera la activación de la señal `INIT`. Mantiene `DONE = 0`, `RESET = 1`, `SH = 0` y `ADD = 0` para inicializar los registros.
+* **CHECK:** Verifica el bit menos significativo del multiplicador (`LSB_B`).
+  * Si `LSB_B = 1`, conmuta al estado **ADD**.
+  * Si `LSB_B = 0`, conmuta directamente al estado **SHIFT**.
+* **ADD:** Activa la señal `ADD = 1` para que el acumulador sume el valor del multiplicando `MD`.
+* **SHIFT:** Activa la señal `SH = 1` para desplazar los registros y verifica la bandera de finalización `Z`.
+  * Si `Z = 0` (aún quedan bits por procesar), regresa al estado **CHECK**.
+  * Si `Z = 1` (se procesaron todos los bits), avanza al estado **END**.
+* **END:** Activa la señal `DONE = 1`, indicando que la multiplicación ha finalizado y el resultado final está disponible en `PP`.
 
-![Bloque RTL del Multiplicador Secuencial](Imagenes/RTL-Multisec.png)<br>
-*Figura 2: Esquemático RTL de la estructura del Multiplicador Secuencial.*
+#### 1.4 Diagrama de Flujo del Algoritmo
+El flujo algorítmico que ejecuta el sistema durante el proceso de multiplicación secuencial sigue la siguiente lógica de decisión:
 
-![Bloque RTL de Control del Multiplicador](Imagenes/RTL-MULTIC.png)<br>
-*Figura 3: Vista RTL de la Unidad de Control e integración del multiplicador.*
+![Lógica de Estados y Diagrama de Flujo](Imagenes/Logica-de-Estados.png)<br>
+*Figura 3: Diagrama de flujo algorítmico del proceso de multiplicación.*
 
 ---
 
@@ -97,10 +104,10 @@ Para convertir el valor máximo posible del multiplicador, $7 \times 7 = 49$ (`1
 El sistema completo (módulo Top) integra el multiplicador secuencial de 3 bits, el conversor Double Dabble y dos decodificadores BCD a 7 segmentos. Esta arquitectura permite ingresar dos operandos mediante interruptores de la tarjeta FPGA y desplegar el resultado en formato decimal sobre los displays de 7 segmentos.
 
 #### 3.2 Funcionamiento del Top Module
-1. **Entrada de datos:** Los operandos `MD` (3 bits) y `MR` (3 bits) se ingresan mediante switches, y la señal `init` mediante un pulsador.
-2. **Procesamiento Aritmético:** El bloque `mult` ejecuta la multiplicación secuencial coordinada por la ASM, generando el resultado de 6 bits (`pp`) y activando `done`.
-3. **Conversión de Formato:** El bus de 6 bits `pp` es tomado por el módulo `double_dabble`, separando el valor en nibbles de 4 bits para Decenas y Unidades.
-4. **Visualización:** Cada nibble BCD entra a un módulo decodificador que controla las salidas de los displays de 7 segmentos de ánodo o cátodo común.
+1. **Entrada de datos:** Los operandos `MD` (3 bits) y `MR` (3 bits) se ingresan mediante switches, y la señal `INIT` mediante un pulsador.
+2. **Procesamiento Aritmético:** El bloque `mult` ejecuta la multiplicación secuencial coordinada por la FSM, generando el resultado de 6 bits (`PP`) y activando `DONE`.
+3. **Conversión de Formato:** El bus de 6 bits `PP` es tomado por el módulo `double_dabble`, separando el valor en nibbles de 4 bits para Decenas y Unidades.
+4. **Visualización:** Cada nibble BCD entra a un módulo decodificador que controla las salidas de los displays de 7 segmentos.
 
 ---
 
@@ -114,7 +121,7 @@ Se diseñó un testbench en Verilog para validar el comportamiento temporal del 
 * $7 \times 1 = 7$
 * $7 \times 7 = 49$
 
-En la simulación se verifica que la señal `done` se active exactamente al finalizar el conteo de ciclos de la máquina de estados y que la salida del Double Dabble mantenga el valor correcto una vez terminada la operación.
+En la simulación se verifica que la señal `DONE` se active exactamente al finalizar el conteo de ciclos de la máquina de estados y que la salida del Double Dabble mantenga el valor correcto una vez terminada la operación.
 
 ---
 
@@ -122,7 +129,7 @@ En la simulación se verifica que la señal `done` se active exactamente al fina
 
 * **Asignación de Pines en la FPGA:**
 
-La asignación de entradas (switches, reloj `clk`, reset e `init`) y salidas (displays de 7 segmentos y LED indicador de `done`) se configuró mediante la herramienta Pin Planner de Quartus.
+La asignación de entradas (switches, reloj `CLK`, reset e `INIT`) y salidas (displays de 7 segmentos y LED indicador de `DONE`) se configuró mediante la herramienta Pin Planner de Quartus.
 
 * **Funcionamiento en la Tarjeta:**
 
@@ -139,26 +146,26 @@ En el siguiente enlace se puede observar el funcionamiento físico e implementac
 **1. ¿Qué ventajas tiene un multiplicador secuencial frente a uno combinacional?**
 Un multiplicador secuencial reduce drásticamente el área ocupada en la FPGA y el consumo de recursos de hardware (LUTs y compuertas lógicas), ya que reutiliza un único sumador binario pequeño para todos los ciclos de la operación. En contraste, un multiplicador combinacional requiere una red extensa de sumadores en paralelo que crece exponencialmente con el número de bits.
 
-**2. ¿Por qué es necesario utilizar una Máquina de Estados (ASM) en este diseño?**
-La Máquina de Estados Algorítmica es indispensable para sincronizar la secuencia de pasos temporales (carga de datos, evaluación del bit actual, suma acumulada, desplazamiento y generación de la señal final). Garantiza que cada operación ocurra en el ciclo de reloj correcto y permite coordinar de forma ordenada el Datapath.
+**2. ¿Por qué es necesario utilizar una Máquina de Estados (FSM) en este diseño?**
+La Máquina de Estados es indispensable para sincronizar la secuencia de pasos temporales (carga de datos en `START`, verificación del LSB en `CHECK`, suma acumulada en `ADD`, desplazamiento en `SHIFT` y generación del pulso final en `END`). Garantiza que cada operación ocurra en el ciclo de reloj correcto y permite coordinar de forma ordenada el Datapath.
 
 **3. ¿Cómo influye el tamaño de los operandos en el número de ciclos de reloj requeridos?**
-En este multiplicador de 3 bits, el algoritmo requiere 3 iteraciones (ciclos de desplazamiento/suma) más los estados inicial y final. Si los operandos fueran de $N$ bits, el multiplicador requeriría $N$ ciclos principales de procesamiento. El tiempo de cálculo escala linealmente $\mathcal{O}(N)$ con el número de bits del multiplicador.
+En este multiplicador de 3 bits, el algoritmo requiere iteraciones equivalentes al número de bits $m$. Si los operandos fueran de $N$ bits, el multiplicador requeriría $N$ ciclos de procesamiento principal. El tiempo de cálculo escala linealmente $\mathcal{O}(N)$ con el número de bits del multiplicador.
 
 **4. ¿Por qué el algoritmo Double Dabble suma 3 cuando un nibble es mayor o igual a 5?**
 Se suma 3 porque en la codificación BCD los valores válidos por cada dígito abarcan únicamente del 0 al 9 (base 10), mientras que un nibble binario puede representar del 0 al 15 (base 16). La diferencia entre ambas bases al realizar un desplazamiento a la izquierda (multiplicación por 2) es de 6 unidades ($16 - 10 = 6$). Al sumar 3 antes del desplazamiento, el efecto duplicador posterior equivale a haber sumado 6 ($3 \times 2 = 6$), ajustando automáticamente el acarreo hacia el siguiente grupo BCD de decenas o centenas.
 
-**5. ¿Qué función cumple la señal `done` en el diseño del multiplicador?**
-La señal `done` actúa como una bandera de sincronismo (handshake). Indica a los módulos externos o displays que el proceso iterativo de la máquina de estados ha concluido y que el dato presente en el bus de salida de 6 bits es estable y válido para ser registrado o visualizado.
+**5. ¿Qué función cumple la señal `DONE` en el diseño del multiplicador?**
+La señal `DONE` actúa como una bandera de sincronismo (handshake). Indica a los módulos externos o displays que el proceso iterativo de la máquina de estados ha concluido en el estado `END` y que el dato presente en el bus de salida `PP` de 6 bits es estable y válido para ser registrado o visualizado.
 
 ---
 
 ## Conclusiones
 
-* Se diseñó e implementó exitosamente un multiplicador secuencial de 3 bits controlado por una Máquina de Estados Algorítmica (ASM) en Verilog HDL.
+* Se diseñó e implementó exitosamente un multiplicador secuencial de 3 bits controlado por una Máquina de Estados Finita (FSM) en Verilog HDL.
+* Se incorporaron las representaciones gráficas del bloque funcional del multiplicador (`Bloque de Multiplicador.png`), la FSM de control (`Estados-de-Control.png`) y el diagrama de flujo algorítmico (`Logica-de-Estados.png`), sustentando formalmente la arquitectura implementada.
 * Se comprobó experimentalmente la eficiencia del enfoque secuencial, optimizando el uso de recursos lógicos en la tarjeta de desarrollo respecto a soluciones puramente combinacionales.
 * Se integró el algoritmo Double Dabble con decodificadores de 7 segmentos para realizar la conversión directa de binario a BCD en hardware, permitiendo la lectura decimal del resultado final.
-* La validación en simulación previa a la sintesis en Quartus permitió corregir los tiempos de respuesta de la máquina de estados y asegurar la correcta activación de la señal `done`.
 
 ---
 

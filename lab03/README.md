@@ -38,11 +38,14 @@ Es el bloque encargado de almacenar, desplazar y operar los datos numéricos. Su
 * **Acumulador / Registro de Productos Parciales (`PP`):** Registro de 6 bits ($2m$ bits) que almacena la suma acumulada del producto final.
 * **Sumador Binario:** Circuito aritmético que adiciona el multiplicando (`MD`) al acumulador únicamente cuando el bit menos significativo (`LSB`) del registro `MR` es igual a `1`.
 
+![RTL Multiplicador Secuencial](Imagenes/RTL-Multisec.png)<br>
+*Figura 2: Esquemático RTL de la estructura de la Ruta de Datos (Datapath).*
+
 #### 1.3 Bloque de Control (Máquina de Estados Finita - FSM)
 La Unidad de Control es una Máquina de Estados Algorítmica encargada de coordinar las operaciones del Datapath en cada ciclo de reloj. No realiza cálculos aritméticos directos, sino que genera las señales de habilitación (`SH`, `ADD`, `RESET`, `DONE`) necesarias:
 
 ![Estados de Control](Imagenes/Estados-de-Control.png)<br>
-*Figura 2: Diagrama de la Máquina de Estados Finita (FSM) de control.*
+*Figura 3: Diagrama de la Máquina de Estados Finita (FSM) de control.*
 
 * **START:** Espera la activación de la señal `INIT`. Mantiene `DONE = 0`, `RESET = 1`, `SH = 0` y `ADD = 0` para inicializar los registros.
 * **CHECK:** Verifica el bit menos significativo del multiplicador (`LSB_B`).
@@ -54,11 +57,17 @@ La Unidad de Control es una Máquina de Estados Algorítmica encargada de coordi
   * Si `Z = 1` (se procesaron todos los bits), avanza al estado **END**.
 * **END:** Activa la señal `DONE = 1`, indicando que la multiplicación ha finalizado y el resultado final está disponible en `PP`.
 
-#### 1.4 Diagrama de Flujo del Algoritmo
-El flujo algorítmico que ejecuta el sistema durante el proceso de multiplicación secuencial sigue la siguiente lógica de decisión:
+![RTL Control Multiplicador](Imagenes/RTL-MULTIC.png)<br>
+*Figura 4: Vista RTL de la integración de la Unidad de Control.*
 
-![Lógica de Estados y Diagrama de Flujo](Imagenes/Logica-de-Estados.png)<br>
-*Figura 3: Diagrama de flujo algorítmico del proceso de multiplicación.*
+#### 1.4 Diagrama de Flujo del Algoritmo
+El flujo algorítmico que ejecuta el sistema durante el proceso de multiplicación secuencial sigue la siguiente lógica de decisión y flujo de estados:
+
+![Flujo de Estados](Imagenes/Flujo%20de%20estados.png)<br>
+*Figura 5: Diagrama de flujo de estados de la ASM.*
+
+![Lógica de Estados](Imagenes/Logica-de-Estados.png)<br>
+*Figura 6: Diagrama de flujo algorítmico detallado del proceso de multiplicación.*
 
 ---
 
@@ -94,7 +103,7 @@ Para convertir el valor máximo posible del multiplicador, $7 \times 7 = 49$ (`1
 #### 2.4 Implementación en Verilog
 
 ![RTL Double Dabble](Imagenes/RTL-Dobble.png)<br>
-*Figura 4: Esquemático RTL del módulo conversor Double Dabble.*
+*Figura 7: Esquemático RTL del módulo conversor Double Dabble.*
 
 ---
 
@@ -129,7 +138,8 @@ En la simulación se verifica que la señal `DONE` se active exactamente al fina
 
 * **Asignación de Pines en la FPGA:**
 
-La asignación de entradas (switches, reloj `CLK`, reset e `INIT`) y salidas (displays de 7 segmentos y LED indicador de `DONE`) se configuró mediante la herramienta Pin Planner de Quartus.
+![Pin Planner](Imagenes/Pinplaner.png)<br>
+*Figura 8: Asignación de pines en la FPGA mediante Pin Planner.*
 
 * **Funcionamiento en la Tarjeta:**
 
@@ -137,7 +147,7 @@ En el siguiente enlace se puede observar el funcionamiento físico e implementac
 
 [**Ver video de la simulación y prueba en hardware**](Video/Videofun.mp4)
 
-*\*Figura 5: Demostración en video de la multiplicación secuencial y visualización en displays.\**
+*\*Figura 9: Demostración en video de la multiplicación secuencial y visualización en displays.\**
 
 ---
 
@@ -163,7 +173,7 @@ La señal `DONE` actúa como una bandera de sincronismo (handshake). Indica a lo
 ## Conclusiones
 
 * Se diseñó e implementó exitosamente un multiplicador secuencial de 3 bits controlado por una Máquina de Estados Finita (FSM) en Verilog HDL.
-* Se incorporaron las representaciones gráficas del bloque funcional del multiplicador (`Bloque de Multiplicador.png`), la FSM de control (`Estados-de-Control.png`) y el diagrama de flujo algorítmico (`Logica-de-Estados.png`), sustentando formalmente la arquitectura implementada.
+* Se integraron de forma completa todas las evidencias gráficas del diseño: diagrama funcional (`Bloque de Multiplicador.png`), RTLs del sistema (`RTL-Multisec.png`, `RTL-MULTIC.png`, `RTL-Dobble.png`), diagramas de flujo y FSM (`Estados-de-Control.png`, `Flujo de estados.png`, `Logica-de-Estados.png`), y asignación de pines (`Pinplaner.png`).
 * Se comprobó experimentalmente la eficiencia del enfoque secuencial, optimizando el uso de recursos lógicos en la tarjeta de desarrollo respecto a soluciones puramente combinacionales.
 * Se integró el algoritmo Double Dabble con decodificadores de 7 segmentos para realizar la conversión directa de binario a BCD en hardware, permitiendo la lectura decimal del resultado final.
 

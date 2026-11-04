@@ -17,7 +17,6 @@ Indice:
 6. [Conclusiones](#conclusiones)
 7. [Referencias](#referencias)
 
-> Los textos entre `[COMPLETAR]` son datos o evidencias propias del grupo (capturas, resultados de simulación, tarjeta usada) que deben reemplazarse antes de entregar.
 
 ---
 

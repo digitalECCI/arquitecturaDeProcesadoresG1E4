@@ -46,9 +46,8 @@ top
 └── uart_datos
     └── uart
 ```
-
-![Diagrama de bloques](Imagenes/Diagrama_bloques.png)<br>
-*Figura 1: Diagrama de bloques del sistema completo. `[COMPLETAR: insertar captura]`*
+![Diagrama de bloques](RTL-G.png)<br>
+*Figura 1: Diagrama de bloques del sistema completo. 
 
 ---
 
@@ -173,6 +172,8 @@ La ALU instancia todos los módulos anteriores, que trabajan **simultáneamente*
 | `always @(*) case(opcode)` | Multiplexor combinacional que elige el resultado. |
 | `assign zero = ~(result[0] \| ... \| result[7]);` | Bandera de cero: NOR de los bits del resultado. |
 
+![RTL ALU](RTL-A.png)
+
 ---
 
 ### 5. Banco de registros
@@ -194,9 +195,8 @@ Características importantes:
 * La **lectura es síncrona**: el dato aparece en `data_out` un ciclo de reloj después de activar `read_en`.
 * Si no se activa `read_en`, `data_out` conserva su último valor.
 
-![Banco registro](Imagenes/Banco_registro.png)<br>
-*Figura 2: RTL Viewer del banco de registros. `[COMPLETAR: insertar captura]`*
-
+![Banco registro](RTL-B.png)<br>
+*Figura 2: RTL Viewer del banco de registros. 
 ---
 
 ### 6. Módulo `top`
@@ -224,9 +224,6 @@ Secuencia típica para operar (ejemplo 12 y 60):
 | 8 | `wr_en=0`, `rd_en=1`, `dir=2` | `out_visual` muestra el resultado. |
 
 > Como la lectura es síncrona, entre leer y guardar `registro_A` debe pasar un ciclo de reloj.
-
-`[COMPLETAR: indicar cómo quedó integrado uart_datos en el top final y qué switches se usaron para dir_memoria, alu_op, fuente_datos, etc.]`
-
 ---
 
 ### 7. UART (transmisor)
@@ -250,7 +247,7 @@ Funcionamiento:
 
 Ejemplo: enviar `A` (`0x41`) produce la trama `1 01000001 0`; por `tx` sale: `0` (inicio), `1,0,0,0,0,0,1,0` (datos, LSB primero) y `1` (parada).
 
-![UART TX](Imagenes/UART_TX.png)<br>
+
 *Figura 3: Trama UART. `[COMPLETAR: insertar captura de simulación o analizador]`*
 
 ---
@@ -316,7 +313,7 @@ Tabla de verificación (completar con lo observado en la simulación):
 | `110` | 243 | `[COMPLETAR]` |
 | `111` | 48 | `[COMPLETAR]` |
 
-![Simulación](Imagenes/Simulacion.png)<br>
+![Simulación](SIMU.jpeg))<br>
 *Figura 4: Formas de onda de la simulación. `[COMPLETAR: insertar captura]`*
 
 ---
@@ -326,15 +323,14 @@ Tabla de verificación (completar con lo observado en la simulación):
 * **Tarjeta FPGA y herramienta:** `[COMPLETAR: modelo de la tarjeta, Quartus, frecuencia del reloj]`
 
 * **Asignación de pines en la FPGA:**
-![Pin Planner](Imagenes/Pinplaner.png)<br>
-*Figura 5: Pin Planner. `[COMPLETAR: insertar captura]`*
+![Pin Planner 1](PIN-1.png)
+![Pin Planner 2](PIN-2.png)
+![Pin Planner 3](PIN-3.png)
+![Pin Planner 4](PIN-4.png))<br>
+*Figura 5: Pin Planner.
 
 * **Visualización por UART:** configuración de la terminal serial (9600 baudios, 8 bits de datos, sin paridad, 1 bit de parada) y mensaje recibido.
 `[COMPLETAR: captura de la terminal con el mensaje recibido]`
-
-* **Funcionamiento en la tarjeta:**
-
-[**Ver video del funcionamiento**](Video/Videofun.mp4) `[COMPLETAR: enlace al video]`
 
 ---
 

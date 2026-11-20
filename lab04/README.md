@@ -46,7 +46,7 @@ top
 └── uart_datos
     └── uart
 ```
-![Diagrama de bloques](RTL-G.png)<br>
+![Diagrama de bloques](Imagenes/RTL-G.png)<br>
 *Figura 1: Diagrama de bloques del sistema completo. 
 
 ---
@@ -172,7 +172,7 @@ La ALU instancia todos los módulos anteriores, que trabajan **simultáneamente*
 | `always @(*) case(opcode)` | Multiplexor combinacional que elige el resultado. |
 | `assign zero = ~(result[0] \| ... \| result[7]);` | Bandera de cero: NOR de los bits del resultado. |
 
-![RTL ALU](RTL-A.png)
+![RTL ALU](Imagenes/RTL-A.png)
 
 ---
 
@@ -195,7 +195,7 @@ Características importantes:
 * La **lectura es síncrona**: el dato aparece en `data_out` un ciclo de reloj después de activar `read_en`.
 * Si no se activa `read_en`, `data_out` conserva su último valor.
 
-![Banco registro](RTL-B.png)<br>
+![Banco registro](Imagenes/RTL-B.png)<br>
 *Figura 2: RTL Viewer del banco de registros. 
 ---
 
@@ -313,7 +313,7 @@ Tabla de verificación (completar con lo observado en la simulación):
 | `110` | 243 | `[COMPLETAR]` |
 | `111` | 48 | `[COMPLETAR]` |
 
-![Simulación](SIMU.jpeg))<br>
+![Simulación](Imagenes/SIMU.jpeg))<br>
 *Figura 4: Formas de onda de la simulación. `[COMPLETAR: insertar captura]`*
 
 ---
@@ -323,10 +323,10 @@ Tabla de verificación (completar con lo observado en la simulación):
 * **Tarjeta FPGA y herramienta:** `[COMPLETAR: modelo de la tarjeta, Quartus, frecuencia del reloj]`
 
 * **Asignación de pines en la FPGA:**
-![Pin Planner 1](PIN-1.png)
-![Pin Planner 2](PIN-2.png)
-![Pin Planner 3](PIN-3.png)
-![Pin Planner 4](PIN-4.png))<br>
+![Pin Planner 1](Imagenes/PIN-1.png)
+![Pin Planner 2](Imagenes/PIN-2.png)
+![Pin Planner 3](Imagenes/PIN-3.png)
+![Pin Planner 4](Imagenes/PIN-4.png))<br>
 *Figura 5: Pin Planner.
 
 * **Visualización por UART:** configuración de la terminal serial (9600 baudios, 8 bits de datos, sin paridad, 1 bit de parada) y mensaje recibido.

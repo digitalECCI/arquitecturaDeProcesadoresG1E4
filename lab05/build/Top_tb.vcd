@@ -1,0 +1,830 @@
+$date
+	Mon Nov 23 15:12:52 2026
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	1ps
+$end
+$scope module Top_tb $end
+$var wire 1 ! halted $end
+$var wire 7 " HEX2 [6:0] $end
+$var wire 7 # HEX1 [6:0] $end
+$var wire 7 $ HEX0 [6:0] $end
+$var reg 1 % clk $end
+$var reg 1 & rst $end
+$var integer 32 ' ciclos [31:0] $end
+$scope module dut $end
+$var wire 1 % clk $end
+$var wire 1 & rst $end
+$var wire 8 ( write_data [7:0] $end
+$var wire 16 ) valor_decimal [15:0] $end
+$var wire 4 * unidad [3:0] $end
+$var wire 1 + uart_tx_internal $end
+$var wire 1 , uart_start $end
+$var wire 1 - uart_done $end
+$var wire 1 . uart_busy $end
+$var wire 3 / rt [2:0] $end
+$var wire 3 0 rs [2:0] $end
+$var wire 1 1 reg_write_en $end
+$var wire 1 2 read_en $end
+$var wire 3 3 rd [2:0] $end
+$var wire 1 4 pc_enable $end
+$var wire 3 5 pc_address [2:0] $end
+$var wire 4 6 opcode [3:0] $end
+$var wire 1 7 mul_start $end
+$var wire 16 8 mul_result [15:0] $end
+$var wire 1 9 mul_done $end
+$var wire 4 : millar [3:0] $end
+$var wire 1 ; ir_load $end
+$var wire 16 < instruction_rom [15:0] $end
+$var wire 9 = immediate [8:0] $end
+$var wire 1 ! halted $end
+$var wire 1 > flags_write_en $end
+$var wire 1 ? div_start $end
+$var wire 8 @ div_remainder [7:0] $end
+$var wire 8 A div_quotient [7:0] $end
+$var wire 1 B div_error $end
+$var wire 1 C div_done $end
+$var wire 4 D decena_millar [3:0] $end
+$var wire 4 E decena [3:0] $end
+$var wire 8 F data_b [7:0] $end
+$var wire 8 G data_a [7:0] $end
+$var wire 4 H centena [3:0] $end
+$var wire 1 I alu_zero $end
+$var wire 16 J alu_result [15:0] $end
+$var wire 1 K alu_overflow $end
+$var wire 1 L alu_negative $end
+$var wire 1 M alu_carry $end
+$var wire 7 N HEX2 [6:0] $end
+$var wire 7 O HEX1 [6:0] $end
+$var wire 7 P HEX0 [6:0] $end
+$var reg 1 Q carry_flag $end
+$var reg 16 R instruction_reg [15:0] $end
+$var reg 1 S negative_flag $end
+$var reg 1 T overflow_flag $end
+$var reg 8 U resultado_display [7:0] $end
+$var reg 8 V write_data_mux [7:0] $end
+$var reg 1 W zero_flag $end
+$scope module u_alu $end
+$var wire 3 X opcode [2:0] $end
+$var wire 8 Y B [7:0] $end
+$var wire 8 Z A [7:0] $end
+$var reg 1 M carry_out $end
+$var reg 1 L negative $end
+$var reg 1 K overflow $end
+$var reg 9 [ resta_ext [8:0] $end
+$var reg 16 \ resultado [15:0] $end
+$var reg 9 ] suma_ext [8:0] $end
+$var reg 1 I zero $end
+$upscope $end
+$scope module u_banco $end
+$var wire 1 % clk $end
+$var wire 8 ^ data_in [7:0] $end
+$var wire 3 _ read_addr_a [2:0] $end
+$var wire 3 ` read_addr_b [2:0] $end
+$var wire 1 & rst $end
+$var wire 3 a write_addr [2:0] $end
+$var wire 1 1 write_en $end
+$var wire 1 2 read_en $end
+$var reg 8 b data_out_a [7:0] $end
+$var reg 8 c data_out_b [7:0] $end
+$upscope $end
+$scope module u_conversion $end
+$var wire 16 d binario [15:0] $end
+$var wire 4 e unidad [3:0] $end
+$var wire 4 f millar [3:0] $end
+$var wire 4 g decena_millar [3:0] $end
+$var wire 4 h decena [3:0] $end
+$var wire 4 i centena [3:0] $end
+$upscope $end
+$scope module u_display0 $end
+$var wire 1 j b0 $end
+$var wire 1 k b1 $end
+$var wire 1 l b2 $end
+$var wire 1 m b3 $end
+$var wire 7 n s [6:0] $end
+$upscope $end
+$scope module u_display1 $end
+$var wire 1 o b0 $end
+$var wire 1 p b1 $end
+$var wire 1 q b2 $end
+$var wire 1 r b3 $end
+$var wire 7 s s [6:0] $end
+$upscope $end
+$scope module u_display2 $end
+$var wire 1 t b0 $end
+$var wire 1 u b1 $end
+$var wire 1 v b2 $end
+$var wire 1 w b3 $end
+$var wire 7 x s [6:0] $end
+$upscope $end
+$scope module u_divisor $end
+$var wire 8 y A [7:0] $end
+$var wire 8 z B [7:0] $end
+$var wire 1 % clk $end
+$var wire 1 & rst $end
+$var wire 1 ? start $end
+$var wire 9 { residuo_temp [8:0] $end
+$var reg 8 | cociente [7:0] $end
+$var reg 8 } cociente_reg [7:0] $end
+$var reg 4 ~ contador [3:0] $end
+$var reg 8 !" dividendo_reg [7:0] $end
+$var reg 8 "" divisor_reg [7:0] $end
+$var reg 1 C done $end
+$var reg 1 B error $end
+$var reg 2 #" estado [1:0] $end
+$var reg 8 $" residuo [7:0] $end
+$var reg 9 %" residuo_reg [8:0] $end
+$upscope $end
+$scope module u_multiplicador $end
+$var wire 8 &" A [7:0] $end
+$var wire 8 '" B [7:0] $end
+$var wire 1 % clk $end
+$var wire 1 & rst $end
+$var wire 1 7 start $end
+$var reg 16 (" acumulador [15:0] $end
+$var reg 4 )" contador [3:0] $end
+$var reg 1 9 done $end
+$var reg 3 *" estado [2:0] $end
+$var reg 8 +" multiplicador_reg [7:0] $end
+$var reg 16 ," multiplicando [15:0] $end
+$var reg 16 -" resultado [15:0] $end
+$upscope $end
+$scope module u_pc $end
+$var wire 1 % clk $end
+$var wire 1 & rst $end
+$var wire 1 4 enable $end
+$var reg 3 ." address [2:0] $end
+$upscope $end
+$scope module u_rom $end
+$var wire 3 /" address [2:0] $end
+$var reg 16 0" instruction [15:0] $end
+$upscope $end
+$scope module u_uart $end
+$var wire 1 % clk $end
+$var wire 8 1" data_in [7:0] $end
+$var wire 1 & rst $end
+$var wire 1 , start $end
+$var reg 32 2" baud_count [31:0] $end
+$var reg 4 3" bit_index [3:0] $end
+$var reg 1 . busy $end
+$var reg 1 - done $end
+$var reg 1 + tx $end
+$var reg 10 4" tx_frame [9:0] $end
+$upscope $end
+$scope module u_uc $end
+$var wire 1 % clk $end
+$var wire 1 C div_done $end
+$var wire 1 9 mul_done $end
+$var wire 4 5" opcode [3:0] $end
+$var wire 1 & rst $end
+$var wire 1 - uart_done $end
+$var reg 1 ? div_start $end
+$var reg 1 > flags_write_en $end
+$var reg 1 ! halted $end
+$var reg 1 ; ir_load $end
+$var reg 1 7 mul_start $end
+$var reg 4 6" next_state [3:0] $end
+$var reg 1 4 pc_enable $end
+$var reg 1 2 read_en $end
+$var reg 1 1 reg_write_en $end
+$var reg 4 7" state [3:0] $end
+$var reg 1 , uart_start $end
+$upscope $end
+$upscope $end
+$upscope $end
+$enddefinitions $end
+#0
+$dumpvars
+b0 7"
+b1 6"
+b0 5"
+b1111111111 4"
+b0 3"
+b0 2"
+b0 1"
+b1000001000000101 0"
+b0 /"
+b0 ."
+b0 -"
+b0 ,"
+b0 +"
+b0 *"
+b0 )"
+b0 ("
+b0 '"
+b0 &"
+b0 %"
+b0 $"
+b0 #"
+b0 ""
+b0 !"
+b0 ~
+b0 }
+b0 |
+b0 {
+b0 z
+b0 y
+b1000000 x
+0w
+0v
+0u
+0t
+b1000000 s
+0r
+0q
+0p
+0o
+b1000000 n
+0m
+0l
+0k
+0j
+b0 i
+b0 h
+b0 g
+b0 f
+b0 e
+b0 d
+b0 c
+b0 b
+b0 a
+b0 `
+b0 _
+b0 ^
+b0 ]
+b0 \
+b0 [
+b0 Z
+b0 Y
+b0 X
+0W
+b0 V
+b0 U
+0T
+0S
+b0 R
+0Q
+b1000000 P
+b1000000 O
+b1000000 N
+0M
+0L
+0K
+b0 J
+1I
+b0 H
+b0 G
+b0 F
+b0 E
+b0 D
+0C
+0B
+b0 A
+b0 @
+0?
+0>
+b0 =
+b1000001000000101 <
+1;
+b0 :
+09
+b0 8
+07
+b0 6
+b0 5
+14
+b0 3
+02
+01
+b0 0
+b0 /
+0.
+0-
+0,
+1+
+b0 *
+b0 )
+b0 (
+b0 '
+1&
+0%
+b1000000 $
+b1000000 #
+b1000000 "
+0!
+$end
+#10000
+1%
+#20000
+0%
+#30000
+1%
+#40000
+0%
+0&
+#50000
+b101 (
+b101 ^
+b101 V
+b1000 6
+b1000 5"
+b1 3
+b1 a
+b101 =
+12
+0;
+04
+b10 6"
+b1000010000000011 <
+b1000010000000011 0"
+b1000001000000101 R
+b1 7"
+b1 5
+b1 ."
+b1 /"
+b1 '
+1%
+#60000
+0%
+#70000
+02
+b110 6"
+b10 7"
+b10 '
+1%
+#80000
+0%
+#90000
+11
+b0 6"
+b110 7"
+b11 '
+1%
+#100000
+0%
+#110000
+b10010 $
+b10010 P
+b10010 n
+1j
+1l
+1;
+14
+01
+b1 6"
+b101 *
+b101 e
+b0 7"
+b101 )
+b101 d
+b101 U
+b100 '
+1%
+#120000
+0%
+#130000
+b11 (
+b11 ^
+b11 V
+b10 3
+b10 a
+b11 =
+12
+0;
+04
+b10 6"
+b11001010000 <
+b11001010000 0"
+b1000010000000011 R
+b1 7"
+b10 5
+b10 ."
+b10 /"
+b101 '
+1%
+#140000
+0%
+#150000
+02
+b110 6"
+b10 7"
+b110 '
+1%
+#160000
+0%
+#170000
+11
+b0 6"
+b110 7"
+b111 '
+1%
+#180000
+0%
+#190000
+b110000 $
+b110000 P
+b110000 n
+1k
+0l
+1;
+14
+01
+b1 6"
+b11 *
+b11 e
+b0 7"
+b11 )
+b11 d
+b11 U
+b1000 '
+1%
+#200000
+0%
+#210000
+b0 (
+b0 ^
+b0 V
+b0 6
+b0 5"
+b11 3
+b11 a
+b1 0
+b1 _
+b10 /
+b10 `
+b1010000 =
+12
+0;
+04
+b10 6"
+b110100011001000 <
+b110100011001000 0"
+b11001010000 R
+b1 7"
+b11 5
+b11 ."
+b11 /"
+b1001 '
+1%
+#220000
+0%
+#230000
+b1000 (
+b1000 ^
+b1000 V
+0I
+b1000 J
+b1000 \
+b1000 ]
+02
+b110 6"
+b11 F
+b11 Y
+b11 c
+b11 z
+b11 '"
+b101 G
+b101 Z
+b101 b
+b101 y
+b101 &"
+b101 1"
+b10 7"
+b1010 '
+1%
+#240000
+0%
+#250000
+11
+b0 6"
+b110 7"
+b1011 '
+1%
+#260000
+0%
+#270000
+b0 $
+b0 P
+b0 n
+0j
+0k
+1m
+1;
+14
+01
+b1 6"
+b1000 *
+b1000 e
+b0 7"
+b1000 )
+b1000 d
+b1000 U
+b1100 '
+1%
+#280000
+0%
+#290000
+1I
+b0 ]
+b0 J
+b0 \
+b110 X
+b0 (
+b0 ^
+b0 V
+b110 6
+b110 5"
+b100 3
+b100 a
+b11 0
+b11 _
+b1 /
+b1 `
+b11001000 =
+12
+0;
+04
+b10 6"
+b1111000000000000 <
+b1111000000000000 0"
+b110100011001000 R
+b1 7"
+b100 5
+b100 ."
+b100 /"
+b1101 '
+1%
+#300000
+0%
+#310000
+17
+02
+b11 6"
+b101 F
+b101 Y
+b101 c
+b101 z
+b101 '"
+b1000 G
+b1000 Z
+b1000 b
+b1000 y
+b1000 &"
+b1000 1"
+b10 7"
+b1110 '
+1%
+#320000
+0%
+#330000
+07
+b11 7"
+b1 *"
+b101 +"
+b1000 ,"
+b1111 '
+1%
+#340000
+0%
+#350000
+b10 *"
+b10000 '
+1%
+#360000
+0%
+#370000
+b11 *"
+b1000 ("
+b10001 '
+1%
+#380000
+0%
+#390000
+b1 *"
+b1 )"
+b10 +"
+b10000 ,"
+b10010 '
+1%
+#400000
+0%
+#410000
+b11 *"
+b10011 '
+1%
+#420000
+0%
+#430000
+b1 *"
+b10 )"
+b1 +"
+b100000 ,"
+b10100 '
+1%
+#440000
+0%
+#450000
+b10 *"
+b10101 '
+1%
+#460000
+0%
+#470000
+b11 *"
+b101000 ("
+b10110 '
+1%
+#480000
+0%
+#490000
+b1 *"
+b11 )"
+b0 +"
+b1000000 ,"
+b10111 '
+1%
+#500000
+0%
+#510000
+b11 *"
+b11000 '
+1%
+#520000
+0%
+#530000
+b1 *"
+b100 )"
+b10000000 ,"
+b11001 '
+1%
+#540000
+0%
+#550000
+b11 *"
+b11010 '
+1%
+#560000
+0%
+#570000
+b1 *"
+b101 )"
+b100000000 ,"
+b11011 '
+1%
+#580000
+0%
+#590000
+b11 *"
+b11100 '
+1%
+#600000
+0%
+#610000
+b1 *"
+b110 )"
+b1000000000 ,"
+b11101 '
+1%
+#620000
+0%
+#630000
+b11 *"
+b11110 '
+1%
+#640000
+0%
+#650000
+b1 *"
+b111 )"
+b10000000000 ,"
+b11111 '
+1%
+#660000
+0%
+#670000
+b11 *"
+b100000 '
+1%
+#680000
+0%
+#690000
+b1 *"
+b1000 )"
+b100000000000 ,"
+b100001 '
+1%
+#700000
+0%
+#710000
+b100 *"
+b100010 '
+1%
+#720000
+0%
+#730000
+b110 6"
+b101000 (
+b101000 ^
+b101000 V
+b0 *"
+19
+b101000 8
+b101000 -"
+b100011 '
+1%
+#740000
+0%
+#750000
+11
+b0 6"
+09
+b110 7"
+b100100 '
+1%
+#760000
+0%
+#770000
+b1000000 $
+b1000000 P
+b1000000 n
+b11001 #
+b11001 O
+b11001 s
+1q
+0m
+b100 E
+b100 h
+b0 *
+b0 e
+1;
+14
+01
+b1 6"
+b101000 )
+b101000 d
+b101000 U
+b0 7"
+b100101 '
+1%
+#780000
+0%
+#790000
+b111 X
+b0 (
+b0 ^
+b0 V
+12
+0;
+04
+b10 6"
+b1111 6
+b1111 5"
+b0 3
+b0 a
+b0 0
+b0 _
+b0 /
+b0 `
+b0 =
+b101 5
+b101 ."
+b101 /"
+b1 7"
+b1111000000000000 R
+b100110 '
+1%
+#800000
+0%
+#810000
+02
+b111 6"
+b10 7"
+b0 F
+b0 Y
+b0 c
+b0 z
+b0 '"
+b0 G
+b0 Z
+b0 b
+b0 y
+b0 &"
+b0 1"
+b100111 '
+1%
+#820000
+0%
+#830000
+1!
+b111 7"
+b101000 '
+1%
+#840000
+0%
+#850000
+b101001 '
+1%
+#851000
